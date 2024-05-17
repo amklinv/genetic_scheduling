@@ -1,6 +1,6 @@
 import csv
 import yaml
-from scholarly import scholarly, ProxyGenerator # Google scholar API
+from scholarly import scholarly, ProxyGenerator, MaxTriesExceededException # Google scholar API
 
 # Set up a ProxyGenerator object to use free proxies
 # This needs to be done only once per session
@@ -30,6 +30,8 @@ def scholar_lookup(name, email):
         return total_citations
     except StopIteration:
         print('Could not find', name + ' ' + email)
+    except:
+        return None
     return 0
 
 minisymposia = {}
@@ -70,7 +72,12 @@ with open(r'data/SIAM-MDS24/minisymposia.csv',encoding='utf8') as csv_file:
         line_count += 1
 
 # Read the speaker/organizer data
-people = {}
+try:
+    with open('data/SIAM-MDS24/people.yaml', 'r') as f:
+        people = yaml.load(f, Loader=yaml.SafeLoader)
+except:
+    people = {}
+
 with open(r'data/SIAM-MDS24/people.csv',encoding='utf8') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
@@ -117,7 +124,10 @@ with open(r'data/SIAM-MDS24/minisymposia.yaml', 'w') as file:
 # Look up citation counts for relevant participants
 for email in people:
     name = people[email]["name"]
-    people[email]["citations"] = scholar_lookup(name, email)
+    if not "citations" in people[email] or people[email]["citations"] == None:
+        people[email]["citations"] = scholar_lookup(name, email)
+        if people[email]["citations"] == None:
+            break
 
 with open(r'data/SIAM-MDS24/people.yaml', 'w') as file:
     yaml.dump(people, file)
