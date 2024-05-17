@@ -9,6 +9,8 @@ pg.FreeProxies()
 scholarly.use_proxy(pg)
 
 def scholar_lookup(name, email):
+    if not '@' in email:
+        return 0
     domain = email.split('@')[1]
     search_query = scholarly.search_author(name + ' ' + domain)
     try:
