@@ -28,7 +28,7 @@ def get_nicknames(name):
     return full_names
 
 # Read the minisymposia
-with open(r'data/SIAM-CSE23/minisymposia.yaml') as file:
+with open(r'data/SIAM-MDS24/minisymposia.yaml') as file:
     dict = yaml.load(file, Loader=yaml.FullLoader)
 
 # Get the list of names
