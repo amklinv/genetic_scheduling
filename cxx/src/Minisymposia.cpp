@@ -1,5 +1,6 @@
 #include "yaml-cpp/yaml.h"
 #include "Minisymposia.hpp"
+#include <iostream>
 
 Minisymposia::Minisymposia(const std::string& filename) {
   // Read the minisymposia from yaml on the host
