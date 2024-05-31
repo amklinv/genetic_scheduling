@@ -36,8 +36,8 @@ void Speaker::read(const std::string& filename) {
   YAML::Node nodes = YAML::LoadFile(filename);
 
   for(auto node : nodes) {
-    std::string name = node.first.as<std::string>();
-    unsigned citations = node.second.as<unsigned>();
-    citation_map_[name] = citations;
+    std::string email = node.first.as<std::string>();
+    unsigned citations = node.second["citations"].as<unsigned>();
+    citation_map_[email] = citations;
   }
 }

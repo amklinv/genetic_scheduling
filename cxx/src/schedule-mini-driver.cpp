@@ -9,26 +9,31 @@ int main(int argc, char* argv[]) {
   Kokkos::initialize(argc, argv);
   {
     // Read the themes from yaml
-    Theme::read("../../data/SIAM-CSE23/codes.yaml");
+    std::cout << "Reading themes from yaml\n";
+    Theme::read("../../data/SIAM-MDS24/codes.yaml");
 
     // Read the citations from yaml
-    Speaker::read("../../data/SIAM-CSE23/citations.yaml");
+    std::cout << "Reading citations from yaml\n";
+    Speaker::read("../../data/SIAM-MDS24/citations.yaml");
 
     // Read the rooms from yaml
-    Rooms rooms("../../data/SIAM-CSE23/rooms.yaml");
+    std::cout << "Reading rooms from yaml\n";
+    Rooms rooms("../../data/SIAM-MDS24/rooms.yaml");
 
     // Read the timeslots from yaml
-    Timeslots tslots("../../data/SIAM-CSE23/timeslots.yaml");
+    std::cout << "Reading timeslots from yaml\n";
+    Timeslots tslots("../../data/SIAM-MDS24/timeslots.yaml");
 
     // Read the minisymposia from yaml
-    Minisymposia mini("../../data/SIAM-CSE23/minisymposia.yaml", rooms, tslots);
+    std::cout << "Reading minisymposia from yaml\n";
+    Minisymposia mini("../../data/SIAM-MDS24/minisymposia.yaml", rooms, tslots);
  
     // Run the genetic algorithm
     Scheduler s(mini);
     Genetic<Scheduler> g(s);
     Kokkos::Timer timer;
     timer.reset();
-    auto best_schedule = g.run(10000, 2000, 0.01, 1'000'000'000);
+    auto best_schedule = g.run(10000, 2000, 0.01, 100);
     printf("Runtime: %lf seconds\n", timer.seconds());
     s.record("schedule.md", best_schedule);
 

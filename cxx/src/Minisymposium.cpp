@@ -17,13 +17,13 @@ std::unordered_map<std::string, unsigned> Minisymposium::roman_numeral_map_ = {
 Minisymposium::Minisymposium(unsigned id,
                              const std::string& title, 
                              const std::vector<std::string>& talks,
-                             const std::vector<Speaker>& organizers, 
-                             const std::vector<Speaker>& speakers,
+                             const std::vector<Speaker>& participants, 
                              const std::string& room,
                              const std::vector<unsigned>& valid_timeslots) :
   id_(id),
   title_with_part_(title),
   talks_(talks),
+  participants_(participants),
   room_(room),
   valid_timeslots_(valid_timeslots),
   size_(talks.size())
@@ -46,24 +46,17 @@ Minisymposium::Minisymposium(unsigned id,
 
   // Compute the total citation count
   total_citation_count_ = 0;
-  for(const auto& speaker: speakers) {
-    total_citation_count_ += speaker.citations();
+  for(const auto& participant: participants_) {
+    total_citation_count_ += participant.citations();
   }
 
   // Compute the max citation count
   max_citation_count_ = 0;
-  for(const auto& speaker: speakers) {
-    max_citation_count_ = std::max(max_citation_count_, speaker.citations());
+  for(const auto& participant: participants_) {
+    max_citation_count_ = std::max(max_citation_count_, participant.citations());
   }
 
-  printf("%s: %lf\n", title.c_str(), total_citation_count_);
-
-  // Add the participants
-  for(const auto& speaker : speakers)
-    participants_.push_back(speaker);
-  for(const auto& organizer : organizers) {
-    participants_.push_back(organizer);
-  }
+  printf("%s: %i\n", title.c_str(), total_citation_count_);
 
   // This needs to be sorted for set_intersection
   std::sort(participants_.begin(), participants_.end());

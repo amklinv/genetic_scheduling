@@ -14,17 +14,14 @@ Minisymposia::Minisymposia(const std::string& filename) {
 
   unsigned i=0;
   for(auto node : nodes) {
-    std::string title = node.first.as<std::string>();
+    unsigned id = node.first.as<unsigned>();
+    std::string title = node.second["title"].as<std::string>();
     std::cout << "Parsing " << title << std::endl;
-    unsigned id = node.second["session number"].as<unsigned>();
     std::vector<unsigned> codes = node.second["class codes"].as<std::vector<unsigned>>();
     std::vector<std::string> talks = node.second["talks"].as<std::vector<std::string>>();
-    std::vector<std::string> organizer_names;
-    if(node.second["organizers"])
-      organizer_names = node.second["organizers"].as<std::vector<std::string>>();
-    std::vector<std::string> speaker_names;
-    if(node.second["speakers"])
-      speaker_names = node.second["speakers"].as<std::vector<std::string>>();
+    std::vector<std::string> emails;
+    if(node.second["emails"])
+      emails = node.second["emails"].as<std::vector<std::string>>();
     std::string room;
     if(node.second["room"]) {
       room = node.second["room"].as<std::string>();
@@ -38,16 +35,12 @@ Minisymposia::Minisymposia(const std::string& filename) {
       h_codes(i,j) = codes[j];
     }
 
-    std::vector<Speaker> organizers(organizer_names.size());
-    for(unsigned j=0; j<organizer_names.size(); j++) {
-      organizers[j] = Speaker(organizer_names[j]);
-    }
-    std::vector<Speaker> speakers(speaker_names.size());
-    for(unsigned j=0; j<speaker_names.size(); j++) {
-      speakers[j] = Speaker(speaker_names[j]);
+    std::vector<Speaker> participants(emails.size());
+    for(unsigned j=0; j<emails.size(); j++) {
+      participants[j] = Speaker(emails[j]);
     }
 
-    h_data_[i] = Minisymposium(id, title, talks, organizers, speakers, room, valid_timeslots);
+    h_data_[i] = Minisymposium(id, title, talks, participants, room, valid_timeslots);
     i++;
   }
 

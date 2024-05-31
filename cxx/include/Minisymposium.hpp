@@ -14,8 +14,7 @@ public:
   Minisymposium(unsigned id,
                 const std::string& title,
                 const std::vector<std::string>& talks, 
-                const std::vector<Speaker>& organizers, 
-                const std::vector<Speaker>& speakers,
+                const std::vector<Speaker>& participants, 
                 const std::string& room,
                 const std::vector<unsigned>& valid_timeslots);
   Minisymposium(const Minisymposium&) = default;
